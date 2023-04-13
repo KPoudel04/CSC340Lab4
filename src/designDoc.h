@@ -1,4 +1,4 @@
-/* Lab #4
+/* ** Lab #4 **
  * 1. Understand teh team project
  * 2. Create an algorithm - psuedocode
  * 3. Find bigO complexity
@@ -7,7 +7,7 @@
  * Output: word pairs from file filename and their frequency (look at section 4 in zybooks)
  */
 
-/* Funciton prototypes
+/* ** Funciton prototypes **
  * 
  * Converts a text file with the name fname into a list of senteces.  The list of sentences will be
  * stored in the sentences vector in the same order as it appears in the input file.
@@ -21,4 +21,31 @@
  * and the value is the frequency of this word-pair.
  *
  * void wordpairMapping(vector<string>& sentences, map<pair<string, string> int>& wordpairFreq_map);
+ */
+
+/* ** Algorithms **
+ * 
+ * sentenceSplitter
+ *
+ * While (not at end of file)
+ *  If (current character is ., ?, !, or :)
+ *    Store current string in sentence vector
+ *    Clear current string
+ *  Else
+ *    Add current character to current string
+ * (END sentenceSplitter)
+ *
+ *
+ * wordpairMapping
+ *
+ * Create a sentence vector with output from sentenceSplitter()
+ * For (every sentence in sentence vector)
+ *  For (i-th word in sentence vector-1)
+ *    For (ith+1 word in sentence vector)
+ *      If pair(word i, word i-1) exist in map (not order specific)
+ *        Increment value of pair
+ *      Else
+ *        Create pair(word i, word i-1) pair in map
+ *        Set value to 1
+ * (END wordpairMapping)
  */
