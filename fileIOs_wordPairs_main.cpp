@@ -8,9 +8,9 @@ using namespace std;
 
 int main()
 {
-    int a = 0;
-
-    cout << "a\n";
+    string fname = "SteveJobsSpeech2005.txt";
+    vector<string> vectorTest;
+    F_WORDSPAIRS::sentenceSplitter(fname, vectorTest);
 
     return 0;
 }
