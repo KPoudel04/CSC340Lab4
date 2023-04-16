@@ -25,7 +25,7 @@ void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& 
 
 
 void freqWordpair(const std::string& filename);
-// }
+
 
 #endif
 
