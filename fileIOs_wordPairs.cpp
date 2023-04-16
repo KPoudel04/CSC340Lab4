@@ -49,49 +49,39 @@ namespace F_WORDSPAIRS
         }
 
         // * read from file + extraction sentence
-        string phrase = "";
-        int startI = 0;
-        string line;
         int count = 0; // number of line read counter
-
-        while (getline(file, line))
-        {
-            // print the current line
-            std::cout << line << "\n";
+        string line, sentence;
+        while (getline(file, line)) {
             count++;
 
-            // Find the position of the first ".", "?", "!", or new line character in the line
-            size_t comma_pos = line.find_first_of(".?\"\n");
-            int startI = 0;
-
-            // If one of the characters is found
-            if (comma_pos != string::npos)
-            {
-                std::cout << "[EXTRACTING SENTENCE FROM FILEX...]\n";
-
-                phrase = line.substr(startI, comma_pos - startI); /* Extract the sentence from the line and add it to the vector of sentences
-                                                                   starting at index startI and ending at the position of the first occurrence of ".", "?", "!"
-                                                                   or newline character minus 1
-                                                                  */
-
-                sentences.push_back(phrase); // Add the extracted sentence to the vector of sentences
-
-                startI = comma_pos + 1; /* Update startI to be the position of the first occurrence of ".", "?", "!"
-                                         or newline character plus 1
-                                         so that the next extracted sentence will start at the correct position
-                                        */
-
-                comma_pos = line.find_first_of(".?\"\n", startI); // Find the position of the next delimiter/ newline character, starting at index startI
+            //Splits the line into sentences based on the delimiters
+            size_t pos = 0, end;
+            while ((end = line.find_first_of(".?\"", pos)) != string::npos) {
+                //quotation marks, doesn't seem to work i think
+                if (line[end] == '"' && end < line.length() - 1) {
+                    if (line[end + 1] == '.' || line[end + 1] == '?') {
+                        end++;
+                    }
+                }
+                //question marks
+                if (line[end] == '?' && end < line.length() - 1) {
+                    
+                    if (line[end + 1] == '"') {
+                        end++;
+                    }
+                }
+                sentence += line.substr(pos, end - pos + 1);
+                sentences.push_back(sentence);
+                sentence.clear();
+                pos = end + 1;
             }
-            else // If none of the characters is found
-            {
-                std::cout << "[NO MATCH FOUND]\n";
-
-                // Extract the sentence from the line and add it to the vector of sentences
-                phrase = line.substr(startI);
-                sentences.push_back(phrase);
-            }
+            sentence += line.substr(pos) + " ";
         }
+
+        // Add the last sentence to the vector, if not empty
+        if (!sentence.empty()) {
+            sentences.push_back(sentence);
+        }  
 
         // print all vector data
         for (auto sentence : sentences)
