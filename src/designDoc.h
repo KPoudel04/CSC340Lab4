@@ -13,7 +13,7 @@
  * stored in the sentences vector in the same order as it appears in the input file.
  *
  * void sentenceSplitter(string& fname, vector<string>& sentences);
- 
+ * 
  *
  * Given a list of sentences stored in the first argument sentences, this function indentifies all the
  * unique word-pairs and each word-pairs's frequency.  The identified (word-pair, frequency);s will be
@@ -21,6 +21,12 @@
  * and the value is the frequency of this word-pair.
  *
  * void wordpairMapping(vector<string>& sentences, map<pair<string, string> int>& wordpairFreq_map);
+ *
+ * 
+ * This function flips the wordpairFreq_map such that frequencies wil be the keys and word-pairs will be the
+ * values.  A multipmap will be needed as two word-pairs can have the same frequency.
+ * void freqWordpairMmap(map<pair<string, string>, int>& wordpairFreq_map,
+ *  multimap<int, pair<string, string>>& freqWordpair_mmap);
  */
 
 /* ** Algorithms **
