@@ -41,11 +41,13 @@
  * Create a sentence vector with output from sentenceSplitter()
  * For (every sentence in sentence vector)
  *  For (i-th word in sentence vector-1)
+ *    Remove all no alphabetical/numerical characters from ith word
  *    For (ith+1 word in sentence vector)
- *      If pair(word i, word i-1) exist in map (not order specific)
+ *      Remove all no alphabetical/numerical characters from ith+1 word
+ *      If pair(word i, word i+1) exist in map (not order specific)
  *        Increment value of pair
  *      Else
- *        Create pair(word i, word i-1) pair in map
+ *        Create pair(word i, word i+1) pair in map
  *        Set value to 1
  * (END wordpairMapping)
  */
