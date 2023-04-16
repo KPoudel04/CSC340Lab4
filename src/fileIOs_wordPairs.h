@@ -19,4 +19,7 @@ std::vector<std::string> getWordList(const std::string& sentence);
 void wordpairMapping(std::vector<std::string>& sentences,
   std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map);
 
+void printWordList(const std::vector<std::string>& wl);
+void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& wp_map);
+
 #endif
