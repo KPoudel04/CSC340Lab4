@@ -50,7 +50,7 @@ namespace F_WORDSPAIRS
         }
 
     
-        // * add each line of the file to line + call sentenceSplitter
+        // * add each line of the file to line 
         string line;
         while (getline(file, line)) // Read each line from the file until there is no more line to read
         {
