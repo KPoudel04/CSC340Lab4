@@ -13,7 +13,7 @@ namespace F_WORDSPAIRS
 
     // * function prototype
 
-    // converts a text file with the name fname into a list of sentences
+    // split a line into multiple sentence and add to vector sentences
     void sentenceSplitter(string &fname, vector<string> &sentences);
 }
 
