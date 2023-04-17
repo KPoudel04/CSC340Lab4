@@ -1,4 +1,3 @@
-
 #ifndef FILE_IO_WORDPAIRDS_H_INCLUDE
 #define FILE_IO_WORDPAIRDS_H_INCLUDE
 
@@ -26,10 +25,4 @@ void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& 
 void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
                       std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap);
 
-
-
 #endif
-
-
-
-
