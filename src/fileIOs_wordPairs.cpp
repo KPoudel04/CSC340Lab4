@@ -107,32 +107,12 @@ void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& 
   }
 }
 
-void freqWordpair(const std::string& filename) {
-  std::ifstream infile(filename);
-  if (!infile.good()) {
-    std::cerr << "Error opening file " << filename << std::endl;
-    return;
-  }
+void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map, std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap) {
 
-  std::string line;
-  std::vector<std::string> sentences;
-
-  // Read lines from file and add to vector of sentences
-  while (std::getline(infile, line)) {
-    sentences.push_back(line);
-  }
-
-  infile.close();
-
-  std::map<std::pair<std::string, std::string>, int> wordpairFreq_map;
-
-  // Map word pairs and their frequencies
-  wordpairMapping(sentences, wordpairFreq_map);
-
-  // Print word pair frequency map
-  printWordpairMap(wordpairFreq_map);
-}
-
-
+  for (const auto& wp : wordpairFreq_map) {
+    std::pair<int, std::pair<std::string, std::string>> freqWpPair = {wp.second, wp.first};
+    freqWordpair_mmap.insert(freqWpPair);
+    }
+    }
 
 #endif
