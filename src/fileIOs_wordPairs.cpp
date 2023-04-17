@@ -106,4 +106,13 @@ void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& 
   }
 }
 
+void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
+  std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap) {
+
+  for (const auto& wp : wordpairFreq_map) {
+    std::pair<int, std::pair<std::string, std::string>> freqWpPair = {wp.second, wp.first};
+    freqWordpair_mmap.insert(freqWpPair);
+  }
+}
+
 #endif

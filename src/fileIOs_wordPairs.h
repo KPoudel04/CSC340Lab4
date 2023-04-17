@@ -22,4 +22,7 @@ void wordpairMapping(std::vector<std::string>& sentences,
 void printWordList(const std::vector<std::string>& wl);
 void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& wp_map);
 
+void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
+                      std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap);
+
 #endif
