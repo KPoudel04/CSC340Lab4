@@ -1,10 +1,10 @@
-#include <iostream> //
+#include <iostream> 
 #include <iomanip>
 #include <string>
 #include <vector>
 #include <fstream>
 
-#include "fileIOS_wordPairs.h"
+#include "fileIOs_wordPairs.h"
 
 namespace F_WORDSPAIRS
 {
@@ -13,25 +13,25 @@ namespace F_WORDSPAIRS
     using std::vector;
 
     // * function implementation
-    void sentenceSplitter(string &fname, vector<string> &sentences)
+    void sentenceSplitter(string &fname, vector<string> &sentences) // ? fname should be renamed line as it takes a line and split at each delimiters
     {
-        ifstream file(fname); // open the specified file for input
+    ifstream file(fname);
 
-        // * check if the file is successfully opened or not
-        if (!file.is_open())
+    // * check if the file is successfully opened or not
+    if (!file.is_open())
+    {
+        if (file.fail()) // check the most recent input/output on the stream failed
         {
-            if (file.fail()) // check the most recent input/output on the stream failed
-            {
-                /* Various reasons can explained fail()
-                 -> reaching the end of the file
-                 -> encountering an invalid input
-                 -> an error in the underlying system
-                */
-                std::cout << "Failed to open file\n";
-            }
+            /* Various reasons can explained fail()
+             -> reaching the end of the file
+             -> encountering an invalid input
+             -> an error in the underlying system
+            */
+            std::cout << "Failed to open file\n";
+        }
 
-            if (file.bad()) // check a non-recoverable (severe) error on the stream
-            {
+        if (file.bad()) // check a non-recoverabl (severe) error on the stream
+        {
 
                 /* Various reasons can explained bad()
                  -> error in the underlying file system
@@ -41,69 +41,87 @@ namespace F_WORDSPAIRS
             }
 
             std::cerr << "Unable to open file: " << fname << "\n";
-            // return 1; // TODO: to exit the function if file cannot be open
+            return void();
+            //return 1 (needs to be changed since void can't return a value)
         }
         else
         {
             std::cout << "File opened successfully.\n";
         }
 
-        // * read from file + extraction sentence
-        int count = 0; // number of line read counter
-        string line, sentence;
-        while (getline(file, line)) {
-            count++;
+    
+        // * add each line of the file to line + call sentenceSplitter
+        string line;
+        while (getline(file, line)) // Read each line from the file until there is no more line to read
+        {
+            // std::cout << "Line read : \n";
+            // std::cout << line << "\n";
 
-            //Splits the line into sentences based on the delimiters
-            size_t pos = 0, end;
-            while ((end = line.find_first_of(".?\"", pos)) != string::npos) {
-                //quotation marks, doesn't seem to work i think
-                if (line[end] == '"' && end < line.length() - 1) {
-                    if (line[end + 1] == '.' || line[end + 1] == '?') {
-                        end++;
-                    }
-                }
-                //question marks
-                if (line[end] == '?' && end < line.length() - 1) {
-                    
-                    if (line[end + 1] == '"') {
-                        end++;
-                    }
-                }
-                sentence += line.substr(pos, end - pos + 1);
-                sentences.push_back(sentence);
-                sentence.clear();
-                pos = end + 1;
+            // Check if the line is empty or contains only whitespace characters
+            if (line.empty() || line.find_first_not_of(" \t") == string::npos)
+            {
+                // std::cout << "SKIP EMPTY LINE\n";
+                continue; // skip to the next line
             }
-            sentence += line.substr(pos) + " ";
+
+            // Check if the line ends with a colon character
+            while (line.back() == ':')
+            {
+                string nextLine;
+                if (!getline(file, nextLine)) // checks if there are any more lines to read from the file. If not, the loop is exited.
+                {
+                    break;
+                }
+                line += nextLine; // appends the next line to the current line
+            }
+
+            // cout << "\nLine to be append to the sentenceSplitter function :\n "
+            //      << line << "\n";
+
+            //F_WORDSPAIRS::sentenceSplitter(line, sentences); // * Split the line into sentences and append them to the sentences vector
+            
+            string phrase = "";
+            int startI = 0;
+
+            // loop through every character of the input fname
+            while (startI < fname.length())
+            {
+                // find the position of the first occurrence of a period, question mark, or newline character
+                size_t newline_pos = fname.find_first_of(".?\n", startI);
+
+                // if the end of the fname has been reached, set the newline position to the end of the fname
+                if (newline_pos == string::npos)
+                {
+                    newline_pos = fname.length();
+                }
+
+                // check if the next character after the newline is a double quotation mark
+                if ((newline_pos + 1) < fname.length() && fname.at(newline_pos + 1) == '\"')
+                {
+                    // if it is, append the current phrase and the next character (double quotation mark) to the sentences vector
+                    phrase = fname.substr(startI, newline_pos + 1 - startI);
+                    sentences.push_back(phrase);
+                    startI = newline_pos + 2; // set the starting index of the next sentence to the character after the double quotation mark
+                    continue;
+                }
+
+                // if the next character after the newline is not a double quotation mark, append the current phrase to the sentences vector
+                phrase = fname.substr(startI, newline_pos - startI);
+                sentences.push_back(phrase);
+                startI = newline_pos + 1; // set the starting index of the next sentence to the character after the period or question mark
+                 
+            }//end of while(getline(file, line))
         }
 
-        // Add the last sentence to the vector, if not empty
-        if (!sentence.empty()) {
-            sentences.push_back(sentence);
-        }  
-
-        // print all vector data
+        /*
+        // * print vector containing every line splitted from file fname
         for (auto sentence : sentences)
         {
-            std::cout << sentence << "\n";
+        std::cout << sentence << "\n";
         }
+        */
 
-        // * all file data read checking
-        if (file.eof() && count > 0)
-        {
-            /* count provides accurate verification of eof() to check,
-            -> if there are blank lines
-            -> other extraneous content at the end of the file
-            */
-            std::cout << "Every input of the file have been read\n";
-        }
-        else
-        {
-            std::cout << "NOT Every input of the file have been read\n";
-        }
-
-        file.close(); // close the file
+        file.close(); //closes the file at end of sentenceSplitter
     }
 
 }
