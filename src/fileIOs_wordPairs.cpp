@@ -57,19 +57,20 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences)
     // // Check if the line ends with a colon character
     // while (line.back() == ':')
     // {
-    //   std::string nextLine;
-    //   if (!std::getline(file, nextLine)) // checks if there are any more lines to read from the
-    //                                 // file. If not, the loop is exited.
-    //   {
-    //     break;
-    //   }
-    //   line += nextLine; // appends the next line to the current line
+    //     std::string nextLine;
+    //     if (!std::getline(file, nextLine)) // checks if there are any more lines to read from the
+    //                                        // file. If not, the loop is exited.
+    //     {
+    //         break;
+    //     }
+    //     line += nextLine; // appends the next line to the current line
     // }
 
     // cout << "\nLine to be append to the sentenceSplitter function :\n "
     //      << line << "\n";
 
-    // F_WORDSPAIRS::sentenceSplitter(line, sentences); // * Split the line into sentences and append them to the sentences vector
+    // F_WORDSPAIRS::sentenceSplitter(line, sentences); //  Split the line into sentences and
+    // append them to the sentences vector
 
     std::string phrase = "";
     unsigned int startI = 0;
@@ -95,7 +96,7 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences)
         // mark) to the sentences vector
         phrase = line.substr(startI, newline_pos + 1 - startI);
         sentences.push_back(phrase);
-        startI = newline_pos + 2; // set the starting index of the next sentence to the
+        startI = newline_pos + 1; // set the starting index of the next sentence to the
                                   // character after the double quotation mark
         continue;
       }
