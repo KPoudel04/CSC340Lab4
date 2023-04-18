@@ -4,7 +4,8 @@
 #include "fileIOs_wordPairs.h"
 
 // * function implementation
-void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) // ? fname should be renamed line
+void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) // ? fname should be
+                                                                               // renamed line
                                                                     // as it takes a line and split at
                                                                     // each delimiters
 {
@@ -119,27 +120,29 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) /
 }
 
 std::vector<std::string> getWordList(const std::string& sentence) {
-  char ch;                               // Holds the current character
-  std::string word = "";                 // Holds the current word
+  char ch;                                  // Holds the current character
+  std::string word = "";                    // Holds the current word
   std::vector<std::string> sentenceList(0); // Holds list of words
-
+                                            //
   for (int i = 0; i < sentence.size(); i++) {
-    ch = std::tolower(sentence.at(i));
+    ch = std::tolower(sentence.at(i)); // Tokens are case insensitive
     
+    // Tokens can be seperated by end of sentence characters, spaces, or newlines
     if (ch == '!' || ch == '.' || ch == '?') { 
       sentenceList.push_back(word);
       word = "";
     }
     else if(ch == ' ' || ch == '\n') {
-      if (word.size() != 0) {
+      // If there isn't already characters in string word, we can ignore the current space or newline
+      if (word.size() != 0) { 
         sentenceList.push_back(word);
         word = "";
       }
-    }
+    } // Append all other characters to the current token
     else {
       word += ch;
     }
-
+    // Ensure last token gets added to sentence list
     if (i == sentence.size() - 1 && word.size() != 0) {
         sentenceList.push_back(word);
         word = "";
@@ -154,44 +157,81 @@ void wordpairMapping(std::vector<std::string>& sentences,
   
   std::vector<std::string> wordList(0);
   std::pair<std::string, std::string> wordPair;
-  std::string w1, w2;
+  std::string w1, w2; // Word 1 and word 2
 
   for (int s = 0; s < sentences.size(); s++) {
-    if (sentences.at(s).size() != 0) {
+    if (sentences.at(s).size() != 0) { // Ignore all empty sentences
         wordList = getWordList(sentences.at(s));
 
-        for (int i = 0; i < wordList.size() - 1; i++)
-        {
+      for (int i = 0; i < wordList.size() - 1; i++) {
         w1 = wordList.at(i);
 
-        for (int j = i + 1; j < wordList.size(); j++)
-        {
+        for (int j = i + 1; j < wordList.size(); j++) {
           w2 = wordList.at(j);
 
           // Input words into worpairs by alphabetical order
-          if (w1 < w2)
-          {
+          if (w1 < w2) {
             wordPair.first = w1;
             wordPair.second = w2;
           }
-          else
-          {
+          else {
             wordPair.first = w2;
             wordPair.second = w1;
           }
-
-          if (wordpairFreq_map.find(wordPair) != wordpairFreq_map.end())
-          {
+          
+          // Increment the word-pair frequency if it already exists, else create it
+          if (wordpairFreq_map.find(wordPair) != wordpairFreq_map.end()) {
             wordpairFreq_map[wordPair]++;
           }
-          else
-          {
+          else {
             wordpairFreq_map[wordPair] = 1;
           }
         }
       }
     }
   }
+}
+
+void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
+  std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap) {
+
+  for (const auto& wp : wordpairFreq_map) {
+    std::pair<int, std::pair<std::string, std::string>> freqWpPair = {wp.second, wp.first};
+    freqWordpair_mmap.insert(freqWpPair);
+  }
+}
+
+void printWordpairs(std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_multimap,
+  std::string outFname, int topCnt, int botCnt) {
+
+  std::ofstream ofile(outFname);
+  if (!ofile) {
+    std::cerr << "ERROR: Could not create/open file " << outFname << std::endl;
+    return;
+  }
+
+  std::pair<std::string, std::string> wordpair;
+  
+  std::multimap<int, std::pair<std::string, std::string>>::iterator itr; 
+  for (itr = freqWordpair_multimap.begin();
+       itr != std::next(freqWordpair_multimap.begin(), topCnt);
+       itr++) {
+    // TO-DO: Output topCnt most frequent word-pairs here
+    wordpair = itr->second;
+    ofile << "<" << wordpair.first << ", " << wordpair.second << ">: " << itr->first << std::endl;
+  }
+
+  std::multimap<int, std::pair<std::string, std::string>>::reverse_iterator itr_reverse; 
+  for (itr_reverse = freqWordpair_multimap.rbegin(); 
+       itr_reverse != std::next(freqWordpair_multimap.rbegin(), botCnt);
+       itr_reverse++) {
+    // TO-DO: Output botCnt least frequent word-pairs here
+    wordpair = itr_reverse->second;
+    ofile << "<" << wordpair.first << ", " << wordpair.second << ">: " << itr_reverse->first
+      << std::endl;
+  }
+
+  ofile.close();
 }
 
 void printWordList(const std::vector<std::string>& sentence_vector) {
@@ -218,15 +258,6 @@ void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& 
     currWp = wp.first;
     std::cout << "[" << currWp.first << ", " << currWp.second << "]: " << wp.second
     << std::endl;
-  }
-}
-
-void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
-  std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap) {
-
-  for (const auto& wp : wordpairFreq_map) {
-    std::pair<int, std::pair<std::string, std::string>> freqWpPair = {wp.second, wp.first};
-    freqWordpair_mmap.insert(freqWpPair);
   }
 }
 
