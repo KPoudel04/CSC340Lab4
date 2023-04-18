@@ -2,10 +2,14 @@
 #define FILE_IO_WORDPAIRDS_H_INCLUDE
 
 #include <cctype>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+
+void sentenceSplitter(std::string& fname, std::vector<std::string>& sentence);
 
 // Takes a sentence stored in string sentence and returns a vector of all the words in
 // the sentence
@@ -19,10 +23,10 @@ std::vector<std::string> getWordList(const std::string& sentence);
 void wordpairMapping(std::vector<std::string>& sentences,
   std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map);
 
-void printWordList(const std::vector<std::string>& wl);
-void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& wp_map);
-
 void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
                       std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap);
+
+void printWordList(const std::vector<std::string>& wl);
+void printWordpairMap(const std::map<std::pair<std::string, std::string>, int>& wp_map);
 
 #endif
