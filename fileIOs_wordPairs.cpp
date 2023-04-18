@@ -6,8 +6,6 @@
 
 #include "fileIOs_wordPairs.h"
 
-namespace F_WORDSPAIRS
-{
     using std::ifstream;
     using std::string;
     using std::vector;
@@ -122,6 +120,5 @@ namespace F_WORDSPAIRS
         */
 
         file.close(); //closes the file at end of sentenceSplitter
-    }
 
 }
