@@ -158,6 +158,7 @@ std::vector<std::string> getWordList(const std::string& sentence) {
   std::vector<std::string> wordList;
   for (const auto& kv : token_map) {
     wordList.push_back(kv.second);
+  }
 
   return wordList;
 }
