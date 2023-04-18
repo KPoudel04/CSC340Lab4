@@ -192,27 +192,6 @@ void wordpairMapping(std::vector<std::string>& sentences,
   }
 }
 
-void printWordpairs(std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_multimap,
-  std::string outFname, int topCnt, int botCnt) {
-  // TO-DO: Create and open file
-  
-  std::multimap<int, std::pair<std::string, std::string>>::iterator itr; 
-  for (itr = freqWordpair_multimap.begin();
-       itr != std::next(freqWordpair_multimap.begin(), topCnt);
-       itr++) {
-    // TO-DO: Output topCnt most frequent word-pairs here
-  }
-
-  std::multimap<int, std::pair<std::string, std::string>>::reverse_iterator itr_reverse; 
-  for (itr_reverse = freqWordpair_multimap.rend(); 
-       itr_reverse != std::next(freqWordpair_multimap.rend(), botCnt);
-       itr_reverse++) {
-    // TO-DO: Output botCnt least frequent word-pairs here
-  }
-
-  // TO-DO: Close file
-}
-
 void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpairFreq_map,
   std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_mmap) {
 
@@ -220,6 +199,39 @@ void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpa
     std::pair<int, std::pair<std::string, std::string>> freqWpPair = {wp.second, wp.first};
     freqWordpair_mmap.insert(freqWpPair);
   }
+}
+
+void printWordpairs(std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_multimap,
+  std::string outFname, int topCnt, int botCnt) {
+
+  std::ofstream ofile(outFname);
+  if (!ofile) {
+    std::cerr << "ERROR: Could not create/open file " << outFname << std::endl;
+    return;
+  }
+
+  std::pair<std::string, std::string> wordpair;
+  
+  std::multimap<int, std::pair<std::string, std::string>>::iterator itr; 
+  for (itr = freqWordpair_multimap.begin();
+       itr != std::next(freqWordpair_multimap.begin(), topCnt);
+       itr++) {
+    // TO-DO: Output topCnt most frequent word-pairs here
+    wordpair = itr->second;
+    ofile << "<" << wordpair.first << ", " << wordpair.second << ">: " << itr->first << std::endl;
+  }
+
+  std::multimap<int, std::pair<std::string, std::string>>::reverse_iterator itr_reverse; 
+  for (itr_reverse = freqWordpair_multimap.rbegin(); 
+       itr_reverse != std::next(freqWordpair_multimap.rbegin(), botCnt);
+       itr_reverse++) {
+    // TO-DO: Output botCnt least frequent word-pairs here
+    wordpair = itr_reverse->second;
+    ofile << "<" << wordpair.first << ", " << wordpair.second << ">: " << itr_reverse->first
+      << std::endl;
+  }
+
+  ofile.close();
 }
 
 void printWordList(const std::vector<std::string>& sentence_vector) {
