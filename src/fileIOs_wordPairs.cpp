@@ -119,39 +119,42 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) /
 
 }
 
-std::vector<std::string> getWordList(const std::string& sentence) {
-  char ch;                                      // Holds the current character
-  std::string word = "";                        // Holds the current token
-  std::map<std::string, std::string> token_map; // Holds unique tokens
+std::vector<std::string> getWordList(const std::string& sentence) {                                        
+  char ch;
+  std::string word = "";
+  std::map<std::string, std::string> token_map;
 
   for (unsigned int i = 0; i < sentence.size(); i++) {
-    ch = std::tolower(sentence.at(i)); // Tokens are case insensitive
-    
-    // Tokens can be seperated by end of sentence characters, spaces, or newlines
-    if (ch == '!' || ch == '.' || ch == '?') { 
+    ch = std::tolower(sentence.at(i));
+
+    if (ch == '!' || ch == '.' || ch == '?') {
+      // Add token if it doesn't exist already
       if (token_map.find(word) == token_map.end()) {
         token_map[word] = word;
       }
+
       word = "";
     }
-    else if(ch == ' ' || ch == '\n') {
-      // If there isn't already characters in string word, we can ignore the current space or newline
-      if (word.size() != 0) { 
-        if (token_map.find(word) == token_map.end() {
+    else if (ch == ' ' || ch == '\n') {
+      if (word.size() != 0) {
+        // Add token if it doesn't exist already
+        if (token_map.find(word) == token_map.end()) {
           token_map[word] = word;
         }
+
         word = "";
       }
-    } // Append all other characters to the current token
+    }
     else {
       word += ch;
     }
-    // Ensure last token gets added to sentence list
+
     if (i == sentence.size() - 1 && word.size() != 0) {
-        if (token_map.find(word) == token_map.end() {
-          token_map[word] = word;
-        }
-        word = "";
+      if (token_map.find(word) == token_map.end()) {
+        token_map[word] = word;
+      }
+
+      word = "";
     }
   }
 
@@ -172,7 +175,7 @@ void wordpairMapping(std::vector<std::string>& sentences,
 
   for (unsigned int s = 0; s < sentences.size(); s++) {
     if (sentences.at(s).size() != 0) { // Ignore all empty sentences
-      wordList = getWordList(sentences.at(s));
+        wordList = getWordList(sentences.at(s));
 
       for (unsigned int i = 0; i < wordList.size() - 1; i++) {
         w1 = wordList.at(i);
@@ -190,15 +193,17 @@ void wordpairMapping(std::vector<std::string>& sentences,
             wordPair.second = w1;
           }
           else {
-            continue;
+             // continue;
           }
           
+          if (w1 != w2) {
           // Increment the word-pair frequency if it already exists, else create it
           if (wordpairFreq_map.find(wordPair) != wordpairFreq_map.end()) {
             wordpairFreq_map[wordPair]++;
           }
-          else {
-            wordpairFreq_map[wordPair] = 1;
+          else if (wordpairFreq_map.find(wordPair) == wordpairFreq_map.end()) {
+             wordpairFreq_map[wordPair] = 1;
+          }
           }
         }
       }
