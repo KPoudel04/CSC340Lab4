@@ -32,7 +32,7 @@ void freqWordpairMmap(std::map<std::pair<std::string, std::string>, int>& wordpa
 
 // This function writes the topCnt most frequent word-pairs and the botCnt least frequent word-pairs
 // to a file of the name outFname
-void printWordpairs(std::multipmap<int, std::pair<std::string, std::string>& freqWordpair_multimap,
+void printWordpairs(std::multimap<int, std::pair<std::string, std::string>>& freqWordpair_multimap,
   std::string outFname, int topCnt, int botCnt);
 
 void printWordList(const std::vector<std::string>& wl);
