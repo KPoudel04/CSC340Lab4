@@ -77,7 +77,7 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) /
     //append them to the sentences vector
 
     std::string phrase = "";
-    int startI = 0;
+    unsigned int startI = 0;
 
     // loop through every character of the input line
     while (startI < line.length())
@@ -120,22 +120,26 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences) /
 }
 
 std::vector<std::string> getWordList(const std::string& sentence) {
-  char ch;                                  // Holds the current character
-  std::string word = "";                    // Holds the current word
-  std::vector<std::string> sentenceList(0); // Holds list of words
-                                            //
-  for (int i = 0; i < sentence.size(); i++) {
+  char ch;                                      // Holds the current character
+  std::string word = "";                        // Holds the current token
+  std::map<std::string, std::string> token_map; // Holds unique tokens
+
+  for (unsigned int i = 0; i < sentence.size(); i++) {
     ch = std::tolower(sentence.at(i)); // Tokens are case insensitive
     
     // Tokens can be seperated by end of sentence characters, spaces, or newlines
     if (ch == '!' || ch == '.' || ch == '?') { 
-      sentenceList.push_back(word);
+      if (token_map.find(word) == token_map.end()) {
+        token_map[word] = word;
+      }
       word = "";
     }
     else if(ch == ' ' || ch == '\n') {
       // If there isn't already characters in string word, we can ignore the current space or newline
       if (word.size() != 0) { 
-        sentenceList.push_back(word);
+        if (token_map.find(word) == token_map.end() {
+          token_map[word] = word;
+        }
         word = "";
       }
     } // Append all other characters to the current token
@@ -144,12 +148,18 @@ std::vector<std::string> getWordList(const std::string& sentence) {
     }
     // Ensure last token gets added to sentence list
     if (i == sentence.size() - 1 && word.size() != 0) {
-        sentenceList.push_back(word);
+        if (token_map.find(word) == token_map.end() {
+          token_map[word] = word;
+        }
         word = "";
     }
   }
 
-  return sentenceList;
+  std::vector<std::string> wordList;
+  for (const auto& kv : token_map) {
+    wordList.push_back(kv.second);
+
+  return wordList;
 }
 
 void wordpairMapping(std::vector<std::string>& sentences,
@@ -159,14 +169,14 @@ void wordpairMapping(std::vector<std::string>& sentences,
   std::pair<std::string, std::string> wordPair;
   std::string w1, w2; // Word 1 and word 2
 
-  for (int s = 0; s < sentences.size(); s++) {
+  for (unsigned int s = 0; s < sentences.size(); s++) {
     if (sentences.at(s).size() != 0) { // Ignore all empty sentences
-        wordList = getWordList(sentences.at(s));
+      wordList = getWordList(sentences.at(s));
 
-      for (int i = 0; i < wordList.size() - 1; i++) {
+      for (unsigned int i = 0; i < wordList.size() - 1; i++) {
         w1 = wordList.at(i);
 
-        for (int j = i + 1; j < wordList.size(); j++) {
+        for (unsigned int j = i + 1; j < wordList.size(); j++) {
           w2 = wordList.at(j);
 
           // Input words into worpairs by alphabetical order
@@ -174,9 +184,12 @@ void wordpairMapping(std::vector<std::string>& sentences,
             wordPair.first = w1;
             wordPair.second = w2;
           }
-          else {
+          else if (w1 > w2) {
             wordPair.first = w2;
             wordPair.second = w1;
+          }
+          else {
+            continue;
           }
           
           // Increment the word-pair frequency if it already exists, else create it
