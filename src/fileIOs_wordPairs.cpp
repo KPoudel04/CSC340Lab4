@@ -54,24 +54,6 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences)
       continue; // skip to the next line
     }
 
-    // // Check if the line ends with a colon character
-    // while (line.back() == ':')
-    // {
-    //     std::string nextLine;
-    //     if (!std::getline(file, nextLine)) // checks if there are any more lines to read from the
-    //                                        // file. If not, the loop is exited.
-    //     {
-    //         break;
-    //     }
-    //     line += nextLine; // appends the next line to the current line
-    // }
-
-    // cout << "\nLine to be append to the sentenceSplitter function :\n "
-    //      << line << "\n";
-
-    // F_WORDSPAIRS::sentenceSplitter(line, sentences); //  Split the line into sentences and
-    // append them to the sentences vector
-
     std::string phrase = "";
     unsigned int startI = 0;
 
@@ -95,6 +77,12 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences)
         // if it is, append the current phrase and the next character (double quotation
         // mark) to the sentences vector
         phrase = line.substr(startI, newline_pos + 1 - startI);
+
+        // if (phrase[0] == '"' || phrase[1] == '"')
+        // {
+        //     phrase.erase(0, 2);
+        // }
+
         sentences.push_back(phrase);
         startI = newline_pos + 1; // set the starting index of the next sentence to the
                                   // character after the double quotation mark
@@ -103,13 +91,28 @@ void sentenceSplitter(std::string &fname, std::vector<std::string> &sentences)
 
       // if the next character after the newline is not a double quotation mark, append the
       // current phrase to the sentences vector
+
       phrase = line.substr(startI, newline_pos - startI);
+      // cout << "\n\nPHRASE HERE : " << phrase << "\n\n";
+
+      // check if the first character in the "phrase" string is a double quote character
+      if (phrase[0] == '"')
+      {
+        phrase.erase(0, 2); // if it is, remove the first two characters from the "phrase" string
+      }
+
       sentences.push_back(phrase);
-      startI = newline_pos + 1; // set the starting index of the next sentence to the
+      startI = newline_pos + 2; // set the starting index of the next sentence to the
                                 // character after the period or question mark
 
     } // end of while(getline(file, line))
   }
+
+  // For debugging purpose to print the vector content
+  // for (auto sentence : sentences)
+  // {
+  //     cout << sentence << "\n";
+  // }
 
   file.close(); // closes the file at end of sentenceSplitter
 }
