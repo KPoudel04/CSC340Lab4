@@ -52,7 +52,7 @@ void unitTest1() {
         {{"is", "my"}, 1},
         {{"my", "sample"}, 1}
     };
-    assert(wordpairFreq_map == expectedWordPairFreqMap);
+    assert(wordPairFreqMap == expectedWordPairFreqMap);
 
     // Test freqWordpairMmap
     std::multimap<int, std::pair<std::string, std::string>> freqWordPairMap;
