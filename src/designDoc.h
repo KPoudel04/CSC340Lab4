@@ -41,13 +41,18 @@
  * 
  * sentenceSplitter | Time complexity: O(n)
  *
- * While (not at end of file)
- *  If (current character is ., ?, !, or :)
- *    Store current string in sentence vector
- *    Clear current string
- *  Else
- *    Add current character to current string
- * (END sentenceSplitter)
+ * Open the file specified by fname.
+ * If the file fails to open, print an error message and return.
+ * Read each line from the file.
+ * If the line is empty or contains only whitespace characters, skip it.
+ * Loop through every character of the input line.
+ * Find the position of the first occurrence of a period, question mark, or newline character.
+ * If the next character after the newline is a double quotation mark, append the current phrase and the next character (double quotation mark) to the sentences vector.
+ * If the next character after the newline is not a double quotation mark, append the current phrase to the sentences vector.
+ * Close the file.
+ *
+ * Time complexity : O(n*m) where n is the number of lines in the file and m is the length of each line.
+ *
  *
  *
  * wordpairMapping | Time complexity: O(n)
