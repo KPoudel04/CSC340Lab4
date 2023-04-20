@@ -1,5 +1,5 @@
 /* ** Lab #4 **
- * 1. Understand teh team project
+ * 1. Understand the team project
  * 2. Create an algorithm - psuedocode
  * 3. Find bigO complexity
  *
@@ -25,24 +25,37 @@
  * 
  * This function flips the wordpairFreq_map such that frequencies wil be the keys and word-pairs will be the
  * values.  A multipmap will be needed as two word-pairs can have the same frequency.
+ *
  * void freqWordpairMmap(map<pair<string, string>, int>& wordpairFreq_map,
  *  multimap<int, pair<string, string>>& freqWordpair_mmap);
+ *
+ *
+ * This function writes the top topCnt most frequent word-pairs and botCnt least frequent
+ * word-pairs to a file of the name outFname
+ * 
+ * void printWordpairs(multimap<int, pair<string, string>> &freqWordpair_multimap,
+ *   string outFname, int topCnt, int botCnt);
  */
 
 /* ** Algorithms **
  * 
- * sentenceSplitter
+ * sentenceSplitter | Time complexity: O(n)
  *
- * While (not at end of file)
- *  If (current character is ., ?, !, or :)
- *    Store current string in sentence vector
- *    Clear current string
- *  Else
- *    Add current character to current string
- * (END sentenceSplitter)
+ * Open the file specified by fname.
+ * If the file fails to open, print an error message and return.
+ * Read each line from the file.
+ * If the line is empty or contains only whitespace characters, skip it.
+ * Loop through every character of the input line.
+ * Find the position of the first occurrence of a period, question mark, or newline character.
+ * If the next character after the newline is a double quotation mark, append the current phrase and the next character (double quotation mark) to the sentences vector.
+ * If the next character after the newline is not a double quotation mark, append the current phrase to the sentences vector.
+ * Close the file.
+ *
+ * Time complexity : O(n*m) where n is the number of lines in the file and m is the length of each line.
  *
  *
- * wordpairMapping
+ *
+ * wordpairMapping | Time complexity: O(n)
  *
  * Create a sentence vector with output from sentenceSplitter()
  * For (every sentence in sentence vector)
@@ -56,4 +69,28 @@
  *        Create pair(word i, word i+1) pair in map
  *        Set value to 1
  * (END wordpairMapping)
+ * 
+ *
+ * freqWordpairMmap | Time complexity: O(n)
+ *
+ * freqWordpairMmap with two input parameters, 
+ * a std::map called wordpairFreq_map of std::pair of strings and integers, 
+ * and a std::multimap called freqWordpair_mmap of int and std::pair of strings.
+ * For each std::pair of strings and integers in wordpairFreq_map, 
+ * do the following: 
+ * 1) Create a new std::pair called freqWpPair, with the frequency (integer) as the first element and the wordpair (string, string) as the second element.
+ * 2) Insert the freqWpPair into freqWordpair_mmap using the insert function.
+ * (END freqWordpairMmap)
+ *
+ * 
+ * printWordpairs | Time complexity: O(n)
+ *
+ * Create and open file outFname
+ * For (top topCnt wordpairs in multimap)
+ *   Write wordpair to outFname
+ * For (bottom botCnt wordpairs in multimap)
+ *   Write wordpair to outFname
+ * Close file outFname
  */
+
+
